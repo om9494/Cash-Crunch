@@ -1,0 +1,13 @@
+---
+description: Conventions for the FastAPI AI service and data scripts
+globs: ["ai-service/**", "scripts/**"]
+alwaysApply: false
+---
+
+- FastAPI with Pydantic models for every request/response body.
+- pandas for the forecasting math; keep it in ai-service/forecasting/ as pure
+  functions that take data in and return data out — no direct DB or HTTP calls
+  inside the math functions, so they're independently testable.
+- Type hints on every function signature.
+- The recommendation engine must return ALL candidate options it considered,
+  not just the chosen one — the dashboard needs to show the tradeoff.

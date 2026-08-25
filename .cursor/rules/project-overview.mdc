@@ -1,0 +1,20 @@
+---
+description: Core project context for Cash Crunch Autopilot
+alwaysApply: true
+---
+
+Read PROJECT_BRIEF.md at the repo root before doing anything — it is the source
+of truth for architecture, collection names, and field names. Reuse those exact
+names everywhere; do not invent parallel schemas.
+
+Non-negotiable rules:
+- All money is integer paise, never floating-point rupees, in every layer except
+  the final React display component.
+- Razorpay Capital and Razorpay Payroll have no public sandbox — any code that
+  touches them must be clearly commented as SYNTHETIC and must live behind the
+  same interface a real integration would use, so swapping it later is a
+  one-file change.
+- The AI service only writes "pending" recommendations. It never calls a
+  Razorpay payout endpoint. Only the Express server executes approved actions.
+- Don't add new npm/pip packages beyond what a phase's prompt asks for without
+  flagging it first.

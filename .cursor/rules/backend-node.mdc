@@ -1,0 +1,13 @@
+---
+description: Conventions for the Express server
+globs: ["server/**"]
+alwaysApply: false
+---
+
+- ES modules (import/export), not CommonJS.
+- Mongoose for MongoDB access; one model file per collection in server/models.
+- One router file per resource in server/routes; keep controllers thin.
+- All Razorpay SDK calls live in server/services/razorpay.js — nowhere else.
+- Read RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET from process.env, never hardcode.
+- Every route that can fail (bad merchant id, Razorpay API error) returns a
+  proper HTTP status and JSON error body, not a stack trace.
