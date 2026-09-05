@@ -21,6 +21,9 @@ import Recommendation from '../models/Recommendation.js';
 import Loan from '../models/Loan.js';
 import Payroll from '../models/Payroll.js';
 import SalesTransaction from '../models/SalesTransaction.js';
+import BankBalance from '../models/BankBalance.js';
+import AuditLog from '../models/AuditLog.js';
+import { createTopUpOrder, verifyAndCapturePayment } from '../services/razorpay.js';
 
 const router = Router();
 const AI_URL = () => process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
@@ -243,6 +246,162 @@ router.get('/:id/transactions', async (req, res) => {
   } catch (err) {
     console.error('[GET /api/merchants/:id/transactions]', err.message);
     res.status(500).json({ error: 'Failed to fetch transactions', detail: err.message });
+  }
+});
+
+// ── Helper: refresh forecast from ai-service ──────────────────────────────────
+async function refreshForecastForMerchant(merchantId) {
+  try {
+    const res = await axios.get(`${AI_URL()}/forecast/${merchantId}`, { timeout: 30_000 });
+    return res.data;
+  } catch (err) {
+    console.warn(`[topup] forecast refresh failed for ${merchantId}:`, err.message);
+    return null;
+  }
+}
+
+// ── POST /api/merchants/:id/topup/create-order ────────────────────────────────
+// Creates a Razorpay order for a merchant-initiated funds top-up.
+// Body: { amount_paise? } — defaults to the latest forecast shortfall if absent.
+// Returns: { order_id, amount_paise, currency, key_id }
+// key_id is the PUBLIC Razorpay key — safe to send to the browser.
+router.post('/:id/topup/create-order', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const merchant = await Merchant.findOne({ merchant_id: id }).lean();
+    if (!merchant) {
+      return res.status(404).json({ error: 'Merchant not found', merchant_id: id });
+    }
+
+    // Use provided amount or fall back to latest shortfall
+    let amountPaise = req.body?.amount_paise;
+    if (!amountPaise || typeof amountPaise !== 'number' || amountPaise <= 0) {
+      const latestForecast = await Forecast.findOne({ merchant_id: id })
+        .sort({ generated_at: -1 })
+        .lean();
+      amountPaise = latestForecast?.shortfall_amount_paise ?? 10_000; // ₹100 floor
+    }
+
+    // Razorpay minimum is ₹1 (100 paise)
+    amountPaise = Math.max(100, Math.round(amountPaise));
+
+    const order = await createTopUpOrder(id, amountPaise);
+
+    res.json({
+      order_id:     order.id,
+      amount_paise: order.amount,   // Razorpay echoes in paise
+      currency:     order.currency, // 'INR'
+      key_id:       process.env.RAZORPAY_KEY_ID, // public key — safe to expose
+    });
+  } catch (err) {
+    console.error('[POST topup/create-order]', err.message);
+    res.status(502).json({ error: 'Failed to create order', detail: err.message });
+  }
+});
+
+// ── POST /api/merchants/:id/topup/verify ─────────────────────────────────────
+// Verifies Razorpay signature, captures payment, credits bank balance,
+// writes audit log, refreshes forecast. Returns 400 (nothing written) on
+// signature mismatch — we NEVER touch the balance on an unverified payment.
+router.post('/:id/topup/verify', async (req, res) => {
+  const { id } = req.params;
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    amount_paise,
+  } = req.body || {};
+
+  if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !amount_paise) {
+    return res.status(400).json({
+      error: 'razorpay_order_id, razorpay_payment_id, razorpay_signature, and amount_paise are all required',
+    });
+  }
+
+  try {
+    const merchant = await Merchant.findOne({ merchant_id: id }).lean();
+    if (!merchant) {
+      return res.status(404).json({ error: 'Merchant not found', merchant_id: id });
+    }
+
+    // ── Step 1: verify signature & capture ────────────────────────────────
+    // verifyAndCapturePayment throws with code SIGNATURE_MISMATCH on bad sig.
+    // Balance is NEVER touched unless this passes.
+    let capturedPayment;
+    try {
+      capturedPayment = await verifyAndCapturePayment(
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        Math.round(amount_paise)
+      );
+    } catch (sigErr) {
+      if (sigErr.code === 'SIGNATURE_MISMATCH') {
+        console.warn('[topup/verify] signature mismatch for', id, razorpay_payment_id);
+        return res.status(400).json({
+          error: 'Payment signature verification failed — no funds added',
+          code:  'SIGNATURE_MISMATCH',
+        });
+      }
+      if (sigErr.code === 'UNEXPECTED_PAYMENT_STATUS') {
+        console.warn('[topup/verify] unexpected payment status:', sigErr.paymentStatus);
+        return res.status(400).json({
+          error: `Payment is in status "${sigErr.paymentStatus}" — no funds added`,
+          code:  'UNEXPECTED_PAYMENT_STATUS',
+        });
+      }
+      console.error('[topup/verify] capture error:', sigErr.message);
+      return res.status(502).json({ error: 'Payment capture failed', detail: sigErr.message });
+    }
+
+    // ── Step 2: credit the merchant's bank balance ─────────────────────────
+    const [latestBalance] = await BankBalance
+      .find({ merchant_id: id })
+      .sort({ date: -1 })
+      .limit(1)
+      .lean();
+
+    const oldBalance = latestBalance?.closing_balance_paise ?? 0;
+    const newBalance = oldBalance + Math.round(amount_paise);
+
+    await BankBalance.create({
+      merchant_id:           id,
+      date:                  new Date(),
+      closing_balance_paise: newBalance,
+    });
+
+    // ── Step 3: audit log — include the REAL payment_id ───────────────────
+    // This payment_id is genuinely real (test-mode Payment Gateway),
+    // not a synthetic RazorpayX payout ID.
+    await AuditLog.create({
+      merchant_id: id,
+      action:      'funds_added',
+      actor:       'merchant',
+      before: { closing_balance_paise: oldBalance },
+      after: {
+        closing_balance_paise: newBalance,
+        amount_added_paise:    Math.round(amount_paise),
+        razorpay_payment_id:   razorpay_payment_id,
+        razorpay_order_id:     razorpay_order_id,
+      },
+      timestamp: new Date(),
+    });
+
+    // ── Step 4: refresh forecast so dashboard shows new runway ─────────────
+    // Wait for Atlas replication before the AI service reads the new balance.
+    await new Promise((r) => setTimeout(r, 1500));
+    const updatedForecast = await refreshForecastForMerchant(id);
+
+    res.json({
+      success:           true,
+      payment_id:        razorpay_payment_id,
+      amount_paise:      Math.round(amount_paise),
+      new_balance_paise: newBalance,
+      updated_forecast:  updatedForecast,
+    });
+  } catch (err) {
+    console.error('[POST topup/verify]', err.message);
+    res.status(500).json({ error: 'Top-up verification failed', detail: err.message });
   }
 });
 

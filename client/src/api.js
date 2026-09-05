@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -26,6 +26,20 @@ export const rejectRecommendation  = (id) =>
 // without a business account.
 export const getPayoutStatus = (payoutId) =>
   api.get(`/api/payouts/${payoutId}/status`);
+
+// ── Top-up (real Razorpay Checkout — Payment Gateway test mode) ───────────
+// Creates a Razorpay order; returns { order_id, amount_paise, currency, key_id }
+export const createTopUpOrder = (merchantId, amountPaise) =>
+  api.post(`/api/merchants/${merchantId}/topup/create-order`, { amount_paise: amountPaise });
+
+// Verifies signature + captures payment; returns { success, payment_id, updated_forecast }
+export const verifyTopUp = (merchantId, { razorpay_order_id, razorpay_payment_id, razorpay_signature, amount_paise }) =>
+  api.post(`/api/merchants/${merchantId}/topup/verify`, {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    amount_paise,
+  });
 
 // ── Admin / Demo ───────────────────────────────────────────────────────────
 export const resetDemo = () => api.post('/api/admin/reset');
