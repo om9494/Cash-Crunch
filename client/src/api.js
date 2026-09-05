@@ -31,7 +31,8 @@ export const getPayoutStatus = (payoutId) =>
 export const resetDemo = () => api.post('/api/admin/reset');
 
 // ── Accuracy Report ────────────────────────────────────────────────────────
-export const getAccuracyReport = () => api.get('/api/accuracy-report');
+// Long timeout — AI service re-runs all 50 forecasts before responding
+export const getAccuracyReport = () => api.get('/api/accuracy-report', { timeout: 120000 });
 
 // ── Virtual Accounts ───────────────────────────────────────────────────────
 export const getVirtualAccount  = (id) => api.get(`/api/merchants/${id}/virtual-account`);

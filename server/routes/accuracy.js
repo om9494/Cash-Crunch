@@ -14,7 +14,7 @@ const AI_URL = () => process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
 // ── GET /api/accuracy-report ──────────────────────────────────────────────────
 router.get('/', async (req, res) => {
   try {
-    const aiRes = await axios.get(`${AI_URL()}/accuracy-report`, { timeout: 30_000 });
+    const aiRes = await axios.get(`${AI_URL()}/accuracy-report`, { timeout: 120_000 });
     res.status(aiRes.status).json(aiRes.data);
   } catch (err) {
     if (err.response) {

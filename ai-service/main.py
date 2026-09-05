@@ -22,6 +22,7 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
@@ -470,6 +471,12 @@ def accuracy_report() -> dict:
     result_doc["_id"] = str(inserted.inserted_id)
     result_doc["generated_at"] = doc["generated_at"].isoformat()
 
-    return result_doc
+    # Use JSONResponse with ensure_ascii=False so ₹ and other Unicode
+    # characters are serialised correctly instead of being escaped as â¹
+    import json
+    return JSONResponse(
+        content=json.loads(json.dumps(result_doc, ensure_ascii=False)),
+        media_type="application/json; charset=utf-8",
+    )
 
 
