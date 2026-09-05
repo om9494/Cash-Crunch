@@ -8,6 +8,8 @@ import merchantsRouter      from './routes/merchants.js';
 import recommendationsRouter from './routes/recommendations.js';
 import accuracyRouter       from './routes/accuracy.js';
 import virtualAccountsRouter from './routes/virtualAccounts.js';
+import payoutsRouter        from './routes/payouts.js';
+import adminRouter          from './routes/admin.js';
 
 dotenv.config();
 
@@ -27,6 +29,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/merchants',       merchantsRouter);
 app.use('/api/recommendations', recommendationsRouter);
 app.use('/api/accuracy-report', accuracyRouter);
+app.use('/api/payouts',         payoutsRouter);
+app.use('/api/admin',           adminRouter);
 // virtualAccounts handles both /api/merchants/:id/virtual-account
 // and /api/platform-balance — mounted at /api so full paths resolve
 app.use('/api',                 virtualAccountsRouter);

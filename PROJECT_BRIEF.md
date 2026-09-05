@@ -12,12 +12,21 @@ Razorpay Payroll (salary runs). None of these talk to each other today, so a
 merchant discovers a cash shortfall only when a payroll payment actually fails.
 
 ## Data honesty (do not misrepresent this)
-- Payment Gateway and RazorpayX both have real, public, self-serve TEST MODE APIs.
-  We integrate against these live, in test mode, with test API keys.
-- Razorpay Capital and Razorpay Payroll do NOT have public self-serve sandboxes
-  (partner-gated). We model their data shape faithfully and generate synthetic
-  data for them. Every place this happens must be clearly commented in code as
-  `// SYNTHETIC: models Razorpay Capital shape, no public sandbox exists`.
+- Payment Gateway has a real, public, self-serve TEST MODE API. We integrate
+  against it live, in test mode, with test API keys (Phase 3).
+- RazorpayX Payouts, Razorpay Capital, and Razorpay Payroll do NOT have
+  public self-serve sandboxes usable without a KYC'd business account. We
+  model their data shapes faithfully — matching Razorpay's actual documented
+  object schemas (contact, fund_account, payout) and status lifecycles — and
+  simulate them internally. Every place this happens must be clearly
+  commented in code as `// SYNTHETIC: models RazorpayX Payouts shape, no
+  public sandbox accessible without a business account`.
+- The simulated RazorpayX layer lives behind the exact same function
+  signatures a real integration would use (createContact, createFundAccount,
+  getAccountBalance, createPayout). If real RazorpayX keys become available
+  later, swapping the simulation for the live SDK is a one-file change in
+  server/services/razorpayx.js — nothing else in the codebase should need to
+  change.
 
 ## Architecture
 - /client — React (Vite, JavaScript, Tailwind CSS) — merchant dashboard
