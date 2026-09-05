@@ -12,6 +12,8 @@ import {
   rejectRecommendation,
   getPayoutStatus,
   getMerchantTransactions,
+  createTopUpOrder,
+  verifyTopUp,
 } from '../api.js';
 import RunwayGauge from '../components/RunwayGauge.jsx';
 import VirtualLedger from '../components/VirtualLedger.jsx';
@@ -510,9 +512,233 @@ function PayoutProgressStrip({ payoutState }) {
   );
 }
 
+// ── Razorpay Checkout loader ──────────────────────────────────────────────
+// Dynamically injects checkout.js once; resolves when window.Razorpay exists.
+function loadRazorpayCheckout() {
+  return new Promise((resolve, reject) => {
+    if (window.Razorpay) { resolve(); return; }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload  = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Razorpay Checkout script'));
+    document.head.appendChild(script);
+  });
+}
+
+// ── Add Funds Button ──────────────────────────────────────────────────────
+// Renders alongside the alert_only card. Opens real Razorpay Checkout,
+// verifies the payment server-side, and patches the forecast in state.
+function AddFundsButton({ merchantId, defaultAmountPaise, onSuccess }) {
+  const [editing, setEditing]   = useState(false);
+  const [amountStr, setAmountStr] = useState('');
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState(null);
+  const [successId, setSuccessId] = useState(null);
+
+  // Convert paise → rupees for the input, and back on submit
+  const defaultRupees = defaultAmountPaise ? Math.ceil(defaultAmountPaise / 100) : '';
+
+  function openEdit() {
+    setAmountStr(defaultRupees.toString());
+    setEditing(true);
+    setError(null);
+    setSuccessId(null);
+  }
+
+  async function handlePay() {
+    setError(null);
+    const rupees = parseFloat(amountStr);
+    if (!rupees || rupees < 1) {
+      setError('Enter a valid amount (minimum ₹1)');
+      return;
+    }
+    const paise = Math.round(rupees * 100);
+
+    setLoading(true);
+    try {
+      // Load Checkout script if not already present
+      await loadRazorpayCheckout();
+
+      // Create an order server-side
+      const orderRes = await createTopUpOrder(merchantId, paise);
+      const { order_id, amount_paise, currency, key_id } = orderRes.data;
+
+      // Open Razorpay Checkout modal
+      await new Promise((resolve, reject) => {
+        const rzp = new window.Razorpay({
+          key:         key_id,
+          order_id:    order_id,
+          amount:      amount_paise,
+          currency:    currency,
+          name:        'Cash Crunch Autopilot',
+          description: 'Add funds to merchant account',
+          theme:       { color: '#2563EB' },
+          handler: async (response) => {
+            // Payment completed in Checkout — verify server-side
+            try {
+              const verifyRes = await verifyTopUp(merchantId, {
+                razorpay_order_id:  response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature:  response.razorpay_signature,
+                amount_paise,
+              });
+              const { payment_id, updated_forecast } = verifyRes.data;
+              setSuccessId(payment_id);
+              setEditing(false);
+              onSuccess(updated_forecast);
+              resolve();
+            } catch (verifyErr) {
+              const msg = verifyErr.response?.data?.error || verifyErr.message || 'Verification failed';
+              setError(msg);
+              reject(verifyErr);
+            } finally {
+              setLoading(false);
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              // User closed the modal without paying — just reset
+              setLoading(false);
+              resolve();
+            },
+          },
+        });
+        rzp.open();
+      });
+    } catch (err) {
+      if (!error) setError(err.message || 'Something went wrong');
+      setLoading(false);
+    }
+  }
+
+  // Show success confirmation with the real payment ID
+  if (successId) {
+    return (
+      <div style={{
+        marginTop: 12, padding: '12px 14px',
+        background: colors.tealBg, border: `1px solid ${colors.tealDim}`,
+        borderRadius: 6,
+      }}>
+        <div style={{
+          fontFamily: fonts.mono, fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase',
+          color: colors.teal, marginBottom: 6,
+        }}>✓ Funds Added</div>
+        <div style={{ fontFamily: fonts.body, fontSize: 12, color: colors.tealLight, lineHeight: 1.5 }}>
+          Payment captured successfully. Your runway has been updated.
+        </div>
+        <div style={{
+          marginTop: 8, fontFamily: fonts.mono, fontSize: 10,
+          color: colors.textDim, letterSpacing: '0.04em',
+        }}>
+          Payment ID:{' '}
+          <span style={{ color: colors.tealLight, fontWeight: 600 }}>{successId}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!editing) {
+    return (
+      <button
+        onClick={openEdit}
+        style={{
+          marginTop: 12,
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '8px 16px',
+          background: colors.cyanBg,
+          border: `1px solid ${colors.cyan}`,
+          borderRadius: 5, cursor: 'pointer',
+          fontFamily: fonts.mono, fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.06em', textTransform: 'uppercase',
+          color: colors.cyan, transition: 'all 0.15s',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = colors.cyan;
+          e.currentTarget.style.color = '#fff';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = colors.cyanBg;
+          e.currentTarget.style.color = colors.cyan;
+        }}
+        onFocus={(e)  => { e.currentTarget.style.outline = `2px solid ${colors.cyan}`; }}
+        onBlur={(e)   => { e.currentTarget.style.outline = 'none'; }}
+      >
+        + Add Funds
+      </button>
+    );
+  }
+
+  return (
+    <div style={{ marginTop: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          background: colors.lift, border: `1px solid ${colors.border}`,
+          borderRadius: 5, overflow: 'hidden',
+        }}>
+          <span style={{
+            padding: '0 10px', fontFamily: fonts.mono, fontSize: 13,
+            fontWeight: 600, color: colors.textSecondary,
+            borderRight: `1px solid ${colors.border}`,
+          }}>₹</span>
+          <input
+            type="number"
+            min="1"
+            step="1"
+            value={amountStr}
+            onChange={(e) => setAmountStr(e.target.value)}
+            style={{
+              width: 100, padding: '7px 10px', border: 'none', outline: 'none',
+              fontFamily: fonts.mono, fontSize: 13, color: colors.textPrimary,
+              background: 'transparent',
+            }}
+            autoFocus
+            aria-label="Top-up amount in rupees"
+          />
+        </div>
+        <button
+          onClick={handlePay} disabled={loading}
+          style={{
+            padding: '7px 16px',
+            background: loading ? colors.lift : colors.cyan,
+            border: `1px solid ${loading ? colors.border : colors.cyan}`,
+            borderRadius: 5, cursor: loading ? 'not-allowed' : 'pointer',
+            fontFamily: fonts.mono, fontSize: 11, fontWeight: 600,
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+            color: loading ? colors.textSecondary : '#fff',
+            opacity: loading ? 0.65 : 1, transition: 'all 0.15s',
+          }}
+          onFocus={(e)  => { if (!loading) e.currentTarget.style.outline = `2px solid ${colors.cyan}`; }}
+          onBlur={(e)   => { e.currentTarget.style.outline = 'none'; }}
+        >
+          {loading ? '…Processing' : 'Pay Now'}
+        </button>
+        <button
+          onClick={() => { setEditing(false); setError(null); }} disabled={loading}
+          style={{
+            padding: '7px 12px', background: 'transparent',
+            border: `1px solid ${colors.border}`, borderRadius: 5,
+            cursor: 'pointer', fontFamily: fonts.mono, fontSize: 11,
+            color: colors.textSecondary,
+          }}
+        >Cancel</button>
+      </div>
+      {error && (
+        <div style={{
+          marginTop: 8, fontFamily: fonts.mono, fontSize: 11, color: colors.red,
+        }}>{error}</div>
+      )}
+    </div>
+  );
+}
+
+
 function RecommendationPanel({
   recommendation, merchantId, onStatusChange,
   shortfallDetected, onRecommend, recommending,
+  shortfallAmountPaise,
 }) {
   const [submitting, setSubmitting] = useState(null);
   const [actionError, setActionError] = useState(null);
@@ -716,6 +942,15 @@ function RecommendationPanel({
               {isPending && (
                 <div style={{ marginTop: 4 }}>
                   <BreakerSwitch label="Approve" on={false} disabled={!!submitting} onClick={() => handleApprove(opt)} />
+                  {opt.type === 'alert_only' && (
+                    <AddFundsButton
+                      merchantId={merchantId}
+                      defaultAmountPaise={shortfallAmountPaise}
+                      onSuccess={(updatedForecast) => {
+                        onStatusChange(updatedForecast);
+                      }}
+                    />
+                  )}
                 </div>
               )}
               {isChosen && payoutState && <PayoutProgressStrip payoutState={payoutState} />}
@@ -1091,6 +1326,7 @@ export default function MerchantDetail({ merchantId, onBack }) {
             shortfallDetected={!!shortfall}
             onRecommend={handleRecommend}
             recommending={recommending}
+            shortfallAmountPaise={forecast?.shortfall_amount_paise ?? null}
             onStatusChange={(updatedForecast) => {
               // 1. Apply the new forecast directly into state — no network call,
               //    no risk of 304 returning stale data.
