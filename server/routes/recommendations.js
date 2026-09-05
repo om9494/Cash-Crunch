@@ -40,14 +40,14 @@ import BankBalance from '../models/BankBalance.js';
 import { createPayout } from '../services/razorpayx.js';
 
 const router = Router();
-const AI_URL = () => process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
+const AI_URL = () => (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
 // ── Helper: fetch a fresh forecast from the ai-service ────────────────────
 // Returns the forecast data on success, or null if the ai-service is down.
 // We never let a forecast failure block the approval response.
 async function refreshForecast(merchantId) {
   try {
-    const res = await axios.get(`${AI_URL()}/forecast/${merchantId}`, { timeout: 30_000 });
+    const res = await axios.get(`${AI_URL()}/forecast/${merchantId}`, { timeout: 120_000 });
     return res.data;
   } catch (err) {
     console.warn(`[recommendations] forecast refresh failed for ${merchantId}:`, err.message);

@@ -9,7 +9,7 @@ import { Router } from 'express';
 import axios from 'axios';
 
 const router = Router();
-const AI_URL = () => process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
+const AI_URL = () => (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
 // ── GET /api/accuracy-report ──────────────────────────────────────────────────
 router.get('/', async (req, res) => {

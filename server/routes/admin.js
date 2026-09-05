@@ -27,7 +27,7 @@ import { dirname, resolve } from 'path';
 import axios from 'axios';
 
 const router = Router();
-const AI_URL = () => process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
+const AI_URL = () => (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
 // Resolve the seed script path relative to this file: ../scripts/seed.js
 const __dirname = dirname(fileURLToPath(import.meta.url));

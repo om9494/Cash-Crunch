@@ -26,7 +26,7 @@ import AuditLog from '../models/AuditLog.js';
 import { createTopUpOrder, verifyAndCapturePayment } from '../services/razorpay.js';
 
 const router = Router();
-const AI_URL = () => process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000';
+const AI_URL = () => (process.env.AI_SERVICE_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
 // ── POST /api/merchants/forecast-all ─────────────────────────────────────────
 // Proxy to ai-service GET /forecast/all — runs forecasts for all merchants.
@@ -158,7 +158,7 @@ router.post('/:id/forecast', async (req, res) => {
       return res.status(404).json({ error: 'Merchant not found', merchant_id: id });
     }
 
-    const aiRes = await axios.get(`${AI_URL()}/forecast/${id}`, { timeout: 30_000 });
+    const aiRes = await axios.get(`${AI_URL()}/forecast/${id}`, { timeout: 120_000 });
     res.status(aiRes.status).json(aiRes.data);
   } catch (err) {
     if (err.response) {
@@ -180,7 +180,7 @@ router.post('/:id/recommend', async (req, res) => {
       return res.status(404).json({ error: 'Merchant not found', merchant_id: id });
     }
 
-    const aiRes = await axios.post(`${AI_URL()}/recommend/${id}`, {}, { timeout: 30_000 });
+    const aiRes = await axios.post(`${AI_URL()}/recommend/${id}`, {}, { timeout: 120_000 });
     res.status(aiRes.status).json(aiRes.data);
   } catch (err) {
     if (err.response) {
