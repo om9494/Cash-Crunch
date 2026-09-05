@@ -329,7 +329,7 @@ function Hero() {
               color: C.primary, opacity: 0.75, marginTop: 10,
             }}
           >
-            Cash Flow Autopilot · Razorpay AI Buildathon
+            Cash Flow Autopilot · Om Panchal
           </motion.div>
         </motion.div>
 
@@ -882,7 +882,7 @@ function Footer() {
           Payment Gateway and RazorpayX run against Razorpay test-mode APIs.
         </p>
         <p style={{ fontFamily: F.mono, fontSize: 11, color: 'rgba(255,255,255,0.18)', letterSpacing: '0.04em' }}>
-          Razorpay AI Buildathon · 2026
+          Razorpay AI Buildathon · Om Panchal · 2026
         </p>
       </div>
     </footer>

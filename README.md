@@ -1,8 +1,10 @@
 # CashCrunch Autopilot
 
+![CashCrunch Landing Page](./landing%20page.png)
+
 > **An agentic AI system that watches a small business's sales, bank balance, loan EMIs, and payroll together — predicts cash shortfalls up to 14 days ahead, proposes a bounded cost-labelled fix, and never moves money until the merchant approves.**
 
-Built for the **Razorpay AI Buildathon** by Anushka's Team 2.
+Built for the **Razorpay AI Buildathon** by **Om Panchal**.
 
 ---
 
@@ -292,4 +294,4 @@ Then open `http://localhost:5173`, navigate to any merchant, and click **↻ For
 
 ---
 
-*Built with the Razorpay API · Razorpay AI Buildathon 2026*
+*Built with the Razorpay API · Razorpay AI Buildathon 2026 · Om Panchal*
