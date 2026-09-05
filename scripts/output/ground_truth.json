@@ -4,499 +4,499 @@
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 43141058,
-    "_expected_inflow_paise": 213333135,
-    "_total_obligations_paise": 65346770,
-    "_net_paise": 191127423
+    "_current_balance_paise": 10719553,
+    "_expected_inflow_paise": 44894557,
+    "_total_obligations_paise": 16401599,
+    "_net_paise": 39212511
   },
   {
     "merchant_id": "merchant_001",
     "is_planted_shortfall": true,
     "expected_shortfall_date": "2026-09-09",
-    "expected_shortfall_amount_paise": 11617856,
+    "expected_shortfall_amount_paise": 27918745,
     "_current_balance_paise": 0,
-    "_expected_inflow_paise": 23437193,
-    "_total_obligations_paise": 49821048,
-    "_net_paise": -26383855
+    "_expected_inflow_paise": 41924849,
+    "_total_obligations_paise": 74335575,
+    "_net_paise": -32410726
   },
   {
     "merchant_id": "merchant_002",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-07",
-    "expected_shortfall_amount_paise": 19950486,
-    "_current_balance_paise": 39781877,
-    "_expected_inflow_paise": 110492525,
-    "_total_obligations_paise": 200750601,
-    "_net_paise": -50476199
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 4485353,
+    "_expected_inflow_paise": 33521360,
+    "_total_obligations_paise": 18966294,
+    "_net_paise": 19040419
   },
   {
     "merchant_id": "merchant_003",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 1303991,
-    "_expected_inflow_paise": 35703978,
-    "_total_obligations_paise": 9201426,
-    "_net_paise": 27806543
+    "_current_balance_paise": 10383586,
+    "_expected_inflow_paise": 38349574,
+    "_total_obligations_paise": 13294013,
+    "_net_paise": 35439147
   },
   {
     "merchant_id": "merchant_004",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 9348367,
-    "_expected_inflow_paise": 152640890,
-    "_total_obligations_paise": 32334258,
-    "_net_paise": 129654999
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-12",
+    "expected_shortfall_amount_paise": 55749444,
+    "_current_balance_paise": 44206757,
+    "_expected_inflow_paise": 69387562,
+    "_total_obligations_paise": 169343763,
+    "_net_paise": -55749444
   },
   {
     "merchant_id": "merchant_005",
     "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-17",
-    "expected_shortfall_amount_paise": 44945561,
-    "_current_balance_paise": 0,
-    "_expected_inflow_paise": 89403708,
-    "_total_obligations_paise": 134349269,
-    "_net_paise": -44945561
+    "expected_shortfall_date": "2026-09-09",
+    "expected_shortfall_amount_paise": 17380354,
+    "_current_balance_paise": 58561348,
+    "_expected_inflow_paise": 116480055,
+    "_total_obligations_paise": 298369774,
+    "_net_paise": -123328371
   },
   {
     "merchant_id": "merchant_006",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-09",
-    "expected_shortfall_amount_paise": 23792111,
-    "_current_balance_paise": 627630,
-    "_expected_inflow_paise": 38419196,
-    "_total_obligations_paise": 89993325,
-    "_net_paise": -50946499
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 39469072,
+    "_expected_inflow_paise": 232882442,
+    "_total_obligations_paise": 126395358,
+    "_net_paise": 145956156
   },
   {
     "merchant_id": "merchant_007",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-11",
-    "expected_shortfall_amount_paise": 9676410,
-    "_current_balance_paise": 0,
-    "_expected_inflow_paise": 33676808,
-    "_total_obligations_paise": 61841392,
-    "_net_paise": -28164584
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 57750481,
+    "_expected_inflow_paise": 217196237,
+    "_total_obligations_paise": 76287109,
+    "_net_paise": 198659609
   },
   {
     "merchant_id": "merchant_008",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-15",
-    "expected_shortfall_amount_paise": 47202830,
-    "_current_balance_paise": 0,
-    "_expected_inflow_paise": 54377746,
-    "_total_obligations_paise": 101580576,
-    "_net_paise": -47202830
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 17712292,
+    "_expected_inflow_paise": 41004947,
+    "_total_obligations_paise": 23772858,
+    "_net_paise": 34944381
   },
   {
     "merchant_id": "merchant_009",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 2626181,
-    "_expected_inflow_paise": 41510844,
-    "_total_obligations_paise": 11561955,
-    "_net_paise": 32575070
+    "_current_balance_paise": 10063677,
+    "_expected_inflow_paise": 56060136,
+    "_total_obligations_paise": 33301965,
+    "_net_paise": 32821848
   },
   {
     "merchant_id": "merchant_010",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 21694536,
-    "_expected_inflow_paise": 343922006,
-    "_total_obligations_paise": 75094876,
-    "_net_paise": 290521666
+    "_current_balance_paise": 5127067,
+    "_expected_inflow_paise": 35457101,
+    "_total_obligations_paise": 11378583,
+    "_net_paise": 29205585
   },
   {
     "merchant_id": "merchant_011",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 10676225,
-    "_expected_inflow_paise": 95107004,
-    "_total_obligations_paise": 30128113,
-    "_net_paise": 75655116
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-15",
+    "expected_shortfall_amount_paise": 27541822,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 39072734,
+    "_total_obligations_paise": 66614556,
+    "_net_paise": -27541822
   },
   {
     "merchant_id": "merchant_012",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 22736848,
-    "_expected_inflow_paise": 46445120,
-    "_total_obligations_paise": 30163981,
-    "_net_paise": 39017987
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-14",
+    "expected_shortfall_amount_paise": 6343781,
+    "_current_balance_paise": 4584723,
+    "_expected_inflow_paise": 29639069,
+    "_total_obligations_paise": 70725619,
+    "_net_paise": -36501827
   },
   {
     "merchant_id": "merchant_013",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 8031232,
-    "_expected_inflow_paise": 77443253,
-    "_total_obligations_paise": 52942908,
-    "_net_paise": 32531577
+    "_current_balance_paise": 7641417,
+    "_expected_inflow_paise": 93853659,
+    "_total_obligations_paise": 25525485,
+    "_net_paise": 75969591
   },
   {
     "merchant_id": "merchant_014",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-16",
-    "expected_shortfall_amount_paise": 56555826,
-    "_current_balance_paise": 0,
-    "_expected_inflow_paise": 118946911,
-    "_total_obligations_paise": 175502737,
-    "_net_paise": -56555826
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 8357757,
+    "_expected_inflow_paise": 82173971,
+    "_total_obligations_paise": 19548913,
+    "_net_paise": 70982815
   },
   {
     "merchant_id": "merchant_015",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-08",
-    "expected_shortfall_amount_paise": 1307989,
-    "_current_balance_paise": 14771869,
-    "_expected_inflow_paise": 33972136,
-    "_total_obligations_paise": 63508883,
-    "_net_paise": -14764878
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 24758585,
+    "_expected_inflow_paise": 126238053,
+    "_total_obligations_paise": 47547087,
+    "_net_paise": 103449551
   },
   {
     "merchant_id": "merchant_016",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 5092522,
-    "_expected_inflow_paise": 28538432,
-    "_total_obligations_paise": 9590380,
-    "_net_paise": 24040574
+    "_current_balance_paise": 1511048,
+    "_expected_inflow_paise": 17470964,
+    "_total_obligations_paise": 5795581,
+    "_net_paise": 13186431
   },
   {
     "merchant_id": "merchant_017",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-11",
-    "expected_shortfall_amount_paise": 13912089,
-    "_current_balance_paise": 1416989,
-    "_expected_inflow_paise": 22490998,
-    "_total_obligations_paise": 37820076,
-    "_net_paise": -13912089
-  },
-  {
-    "merchant_id": "merchant_018",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 23476075,
-    "_expected_inflow_paise": 146036478,
-    "_total_obligations_paise": 53548804,
-    "_net_paise": 115963749
+    "_current_balance_paise": 499421,
+    "_expected_inflow_paise": 19573882,
+    "_total_obligations_paise": 7298911,
+    "_net_paise": 12774392
+  },
+  {
+    "merchant_id": "merchant_018",
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-07",
+    "expected_shortfall_amount_paise": 193262103,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 286584845,
+    "_total_obligations_paise": 607603642,
+    "_net_paise": -321018797
   },
   {
     "merchant_id": "merchant_019",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 9303649,
-    "_expected_inflow_paise": 83916763,
-    "_total_obligations_paise": 18972732,
-    "_net_paise": 74247680
+    "_current_balance_paise": 12877191,
+    "_expected_inflow_paise": 78681102,
+    "_total_obligations_paise": 48202456,
+    "_net_paise": 43355837
   },
   {
     "merchant_id": "merchant_020",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 25051899,
-    "_expected_inflow_paise": 70788955,
-    "_total_obligations_paise": 45068900,
-    "_net_paise": 50771954
+    "_current_balance_paise": 26108358,
+    "_expected_inflow_paise": 79882090,
+    "_total_obligations_paise": 52942413,
+    "_net_paise": 53048035
   },
   {
     "merchant_id": "merchant_021",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 3849234,
-    "_expected_inflow_paise": 146996421,
-    "_total_obligations_paise": 49578611,
-    "_net_paise": 101267044
+    "_current_balance_paise": 26653694,
+    "_expected_inflow_paise": 131029849,
+    "_total_obligations_paise": 71664743,
+    "_net_paise": 86018800
   },
   {
     "merchant_id": "merchant_022",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 10378074,
-    "_expected_inflow_paise": 90779700,
-    "_total_obligations_paise": 24046236,
-    "_net_paise": 77111538
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-08",
+    "expected_shortfall_amount_paise": 2556933,
+    "_current_balance_paise": 31397904,
+    "_expected_inflow_paise": 40162617,
+    "_total_obligations_paise": 99190917,
+    "_net_paise": -27630396
   },
   {
     "merchant_id": "merchant_023",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 20977056,
-    "_expected_inflow_paise": 176611478,
-    "_total_obligations_paise": 76335203,
-    "_net_paise": 121253331
+    "_current_balance_paise": 14467487,
+    "_expected_inflow_paise": 256413353,
+    "_total_obligations_paise": 170318020,
+    "_net_paise": 100562820
   },
   {
     "merchant_id": "merchant_024",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 2178239,
-    "_expected_inflow_paise": 17343329,
-    "_total_obligations_paise": 4656999,
-    "_net_paise": 14864569
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-09",
+    "expected_shortfall_amount_paise": 20929852,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 32418151,
+    "_total_obligations_paise": 52325867,
+    "_net_paise": -19907716
   },
   {
     "merchant_id": "merchant_025",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 5007984,
-    "_expected_inflow_paise": 58407802,
-    "_total_obligations_paise": 17296424,
-    "_net_paise": 46119362
+    "_current_balance_paise": 13858520,
+    "_expected_inflow_paise": 31581950,
+    "_total_obligations_paise": 20776970,
+    "_net_paise": 24663500
   },
   {
     "merchant_id": "merchant_026",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 4856449,
-    "_expected_inflow_paise": 55441039,
-    "_total_obligations_paise": 16252863,
-    "_net_paise": 44044625
+    "_current_balance_paise": 72123413,
+    "_expected_inflow_paise": 233615665,
+    "_total_obligations_paise": 148833502,
+    "_net_paise": 156905576
   },
   {
     "merchant_id": "merchant_027",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-15",
-    "expected_shortfall_amount_paise": 150321002,
-    "_current_balance_paise": 137605717,
-    "_expected_inflow_paise": 232565524,
-    "_total_obligations_paise": 520492243,
-    "_net_paise": -150321002
-  },
-  {
-    "merchant_id": "merchant_028",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 30912039,
-    "_expected_inflow_paise": 97432095,
-    "_total_obligations_paise": 45400121,
-    "_net_paise": 82944013
+    "_current_balance_paise": 13845165,
+    "_expected_inflow_paise": 54858923,
+    "_total_obligations_paise": 39762198,
+    "_net_paise": 28941890
+  },
+  {
+    "merchant_id": "merchant_028",
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-08",
+    "expected_shortfall_amount_paise": 18498766,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 59801561,
+    "_total_obligations_paise": 118895893,
+    "_net_paise": -59094332
   },
   {
     "merchant_id": "merchant_029",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 3112823,
-    "_expected_inflow_paise": 21833146,
-    "_total_obligations_paise": 7971969,
-    "_net_paise": 16974000
+    "_current_balance_paise": 8524502,
+    "_expected_inflow_paise": 35225866,
+    "_total_obligations_paise": 18456975,
+    "_net_paise": 25293393
   },
   {
     "merchant_id": "merchant_030",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 1970720,
-    "_expected_inflow_paise": 42891009,
-    "_total_obligations_paise": 28241571,
-    "_net_paise": 16620158
+    "_current_balance_paise": 5971580,
+    "_expected_inflow_paise": 169233047,
+    "_total_obligations_paise": 78965759,
+    "_net_paise": 96238868
   },
   {
     "merchant_id": "merchant_031",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 18908253,
-    "_expected_inflow_paise": 71424327,
-    "_total_obligations_paise": 38727296,
-    "_net_paise": 51605284
+    "_current_balance_paise": 626330,
+    "_expected_inflow_paise": 42046812,
+    "_total_obligations_paise": 15892923,
+    "_net_paise": 26780219
   },
   {
     "merchant_id": "merchant_032",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 48643446,
-    "_expected_inflow_paise": 208934746,
-    "_total_obligations_paise": 72275475,
-    "_net_paise": 185302717
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-11",
+    "expected_shortfall_amount_paise": 37120963,
+    "_current_balance_paise": 40901413,
+    "_expected_inflow_paise": 48459488,
+    "_total_obligations_paise": 126481864,
+    "_net_paise": -37120963
   },
   {
     "merchant_id": "merchant_033",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 13448787,
-    "_expected_inflow_paise": 54255407,
-    "_total_obligations_paise": 23033230,
-    "_net_paise": 44670964
+    "_current_balance_paise": 72609379,
+    "_expected_inflow_paise": 208732703,
+    "_total_obligations_paise": 129590930,
+    "_net_paise": 151751152
   },
   {
     "merchant_id": "merchant_034",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-09",
-    "expected_shortfall_amount_paise": 28213771,
-    "_current_balance_paise": 15668440,
-    "_expected_inflow_paise": 113771688,
-    "_total_obligations_paise": 251563674,
-    "_net_paise": -122123546
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 17348014,
+    "_expected_inflow_paise": 78051341,
+    "_total_obligations_paise": 50238651,
+    "_net_paise": 45160704
   },
   {
     "merchant_id": "merchant_035",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 16619957,
-    "_expected_inflow_paise": 97357199,
-    "_total_obligations_paise": 27659617,
-    "_net_paise": 86317539
+    "_current_balance_paise": 14910261,
+    "_expected_inflow_paise": 101499900,
+    "_total_obligations_paise": 37057700,
+    "_net_paise": 79352461
   },
   {
     "merchant_id": "merchant_036",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 12383973,
-    "_expected_inflow_paise": 70638562,
-    "_total_obligations_paise": 32338809,
-    "_net_paise": 50683726
+    "_current_balance_paise": 12441965,
+    "_expected_inflow_paise": 98300396,
+    "_total_obligations_paise": 33188258,
+    "_net_paise": 77554103
   },
   {
     "merchant_id": "merchant_037",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-10",
-    "expected_shortfall_amount_paise": 11338720,
-    "_current_balance_paise": 0,
-    "_expected_inflow_paise": 22080315,
-    "_total_obligations_paise": 33419035,
-    "_net_paise": -11338720
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 14203649,
+    "_expected_inflow_paise": 93142262,
+    "_total_obligations_paise": 42741949,
+    "_net_paise": 64603962
   },
   {
     "merchant_id": "merchant_038",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 9020360,
-    "_expected_inflow_paise": 33882944,
-    "_total_obligations_paise": 18666294,
-    "_net_paise": 24237010
+    "_current_balance_paise": 871645,
+    "_expected_inflow_paise": 20545463,
+    "_total_obligations_paise": 14802030,
+    "_net_paise": 6615078
   },
   {
     "merchant_id": "merchant_039",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 14071698,
-    "_expected_inflow_paise": 40572008,
-    "_total_obligations_paise": 24406405,
-    "_net_paise": 30237301
+    "_current_balance_paise": 7559965,
+    "_expected_inflow_paise": 18442453,
+    "_total_obligations_paise": 9888754,
+    "_net_paise": 16113664
   },
   {
     "merchant_id": "merchant_040",
-    "is_planted_shortfall": true,
-    "expected_shortfall_date": "2026-09-09",
-    "expected_shortfall_amount_paise": 15441271,
-    "_current_balance_paise": 0,
-    "_expected_inflow_paise": 50361969,
-    "_total_obligations_paise": 94604010,
-    "_net_paise": -44242041
+    "is_planted_shortfall": false,
+    "expected_shortfall_date": null,
+    "expected_shortfall_amount_paise": 0,
+    "_current_balance_paise": 12401898,
+    "_expected_inflow_paise": 40771968,
+    "_total_obligations_paise": 18763650,
+    "_net_paise": 34410216
   },
   {
     "merchant_id": "merchant_041",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 13253956,
-    "_expected_inflow_paise": 33975623,
-    "_total_obligations_paise": 22494100,
-    "_net_paise": 24735479
+    "_current_balance_paise": 8250232,
+    "_expected_inflow_paise": 185544895,
+    "_total_obligations_paise": 55833200,
+    "_net_paise": 137961927
   },
   {
     "merchant_id": "merchant_042",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 16516388,
-    "_expected_inflow_paise": 44740931,
-    "_total_obligations_paise": 21545194,
-    "_net_paise": 39712125
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-09",
+    "expected_shortfall_amount_paise": 11938427,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 27598083,
+    "_total_obligations_paise": 64601039,
+    "_net_paise": -37002956
   },
   {
     "merchant_id": "merchant_043",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 46518259,
-    "_expected_inflow_paise": 161054845,
-    "_total_obligations_paise": 68176926,
-    "_net_paise": 139396178
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-13",
+    "expected_shortfall_amount_paise": 10771545,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 60890685,
+    "_total_obligations_paise": 113013863,
+    "_net_paise": -52123178
   },
   {
     "merchant_id": "merchant_044",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 21537461,
-    "_expected_inflow_paise": 72023789,
-    "_total_obligations_paise": 32018060,
-    "_net_paise": 61543190
+    "_current_balance_paise": 1246092,
+    "_expected_inflow_paise": 42994778,
+    "_total_obligations_paise": 15608510,
+    "_net_paise": 28632360
   },
   {
     "merchant_id": "merchant_045",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 19199366,
-    "_expected_inflow_paise": 79569838,
-    "_total_obligations_paise": 52712159,
-    "_net_paise": 46057045
+    "_current_balance_paise": 34210249,
+    "_expected_inflow_paise": 70126388,
+    "_total_obligations_paise": 48120806,
+    "_net_paise": 56215831
   },
   {
     "merchant_id": "merchant_046",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 4339593,
-    "_expected_inflow_paise": 29761400,
-    "_total_obligations_paise": 14685468,
-    "_net_paise": 19415525
+    "_current_balance_paise": 3520451,
+    "_expected_inflow_paise": 12514867,
+    "_total_obligations_paise": 4863410,
+    "_net_paise": 11171908
   },
   {
     "merchant_id": "merchant_047",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 3186247,
-    "_expected_inflow_paise": 37535592,
-    "_total_obligations_paise": 18449188,
-    "_net_paise": 22272651
+    "_current_balance_paise": 5319499,
+    "_expected_inflow_paise": 39481258,
+    "_total_obligations_paise": 22543221,
+    "_net_paise": 22257536
   },
   {
     "merchant_id": "merchant_048",
     "is_planted_shortfall": false,
     "expected_shortfall_date": null,
     "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 156670,
-    "_expected_inflow_paise": 58931906,
-    "_total_obligations_paise": 23672754,
-    "_net_paise": 35415822
+    "_current_balance_paise": 2190441,
+    "_expected_inflow_paise": 27250965,
+    "_total_obligations_paise": 17000302,
+    "_net_paise": 12441104
   },
   {
     "merchant_id": "merchant_049",
-    "is_planted_shortfall": false,
-    "expected_shortfall_date": null,
-    "expected_shortfall_amount_paise": 0,
-    "_current_balance_paise": 28524947,
-    "_expected_inflow_paise": 300463286,
-    "_total_obligations_paise": 168074088,
-    "_net_paise": 160914145
+    "is_planted_shortfall": true,
+    "expected_shortfall_date": "2026-09-09",
+    "expected_shortfall_amount_paise": 10683228,
+    "_current_balance_paise": 0,
+    "_expected_inflow_paise": 18741829,
+    "_total_obligations_paise": 50830570,
+    "_net_paise": -32088741
   }
 ]

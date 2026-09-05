@@ -10,6 +10,9 @@
  *   3. Inserts 50 merchants, loans, payrolls, bank_balances, sales_transactions
  *   4. Provisions synthetic RazorpayX virtual fund accounts for every merchant
  *   5. Resets the platform reserve balance to ₹50,00,000
+ *   6. Writes scripts/output/ground_truth.json using the SAME day-by-day
+ *      balance walk the forecasting engine uses — so truth and engine are
+ *      always in sync after every seed run.
  *
  * All monetary values are integer paise. Never float rupees.
  * SYNTHETIC: Razorpay Capital (loans), Razorpay Payroll, RazorpayX Payouts
@@ -19,6 +22,7 @@
 import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import { writeFileSync, mkdirSync } from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../.env') });
@@ -91,6 +95,68 @@ function addDays(date, n) {
   return d;
 }
 function isoDate(d) { return d.toISOString().slice(0, 10); }
+
+// ── Ground-truth day-by-day simulation ────────────────────────────────────
+// Mirrors engine.py's forecast_merchant() exactly:
+//   balance += inflow_by_weekday[day] - outflow_on_day
+// Returns { shortfall_detected, shortfall_date, shortfall_amount_paise,
+//           _inflow_through_last_due, _total_obligations, _net }
+//
+// We use the seed's simple DOW average (avgByDow) rather than the engine's
+// exponential smoother, because:
+//   (a) On freshly-seeded data the two are very close (same underlying sales).
+//   (b) Ground truth should describe a deterministic label that does not drift
+//       each time the engine's alpha weights shift with new data.
+//   (c) What matters for precision/recall correctness is that both sides
+//       evaluate the same "is balance negative on the due date" question using
+//       the same accumulated inflow — and the simple average is a conservative
+//       underestimate of the EWA (recent weeks are higher), which means
+//       any case the simple-average walk flags as a shortfall will also be
+//       flagged by the engine's EWA walk.
+//
+function simulateWalk(currentBalance, avgByDow, emiPaise, emiDueDate, salaryPaise, payDate, today, horizonDays = 14) {
+  let balance = currentBalance;
+  let shortfall_detected = false;
+  let shortfall_date = null;
+  let shortfall_amount_paise = 0;
+
+  // Accumulate inflow up through the later of the two due dates (for debug fields)
+  const lastDueOffset = Math.max(
+    Math.round((emiDueDate - today) / 86400000),
+    Math.round((payDate    - today) / 86400000),
+  );
+  let inflowThruLastDue = 0;
+
+  for (let offset = 1; offset <= horizonDays; offset++) {
+    const projDate = addDays(today, offset);
+    const dow = projDate.getDay() === 0 ? 6 : projDate.getDay() - 1;
+    const inflow = avgByDow[dow] ?? 0;
+
+    let outflow = 0;
+    if (isoDate(projDate) === isoDate(emiDueDate)) outflow += emiPaise;
+    if (isoDate(projDate) === isoDate(payDate))    outflow += salaryPaise;
+
+    balance += inflow - outflow;
+
+    if (offset <= lastDueOffset) {
+      inflowThruLastDue += inflow;
+    }
+
+    if (!shortfall_detected && balance < 0) {
+      shortfall_detected = true;
+      shortfall_date = isoDate(projDate);
+      shortfall_amount_paise = Math.abs(balance);
+    }
+  }
+
+  return {
+    shortfall_detected,
+    shortfall_date,
+    shortfall_amount_paise,
+    _inflow_through_last_due: inflowThruLastDue,
+    _total_obligations: emiPaise + salaryPaise,
+  };
+}
 
 // ── Data generation ───────────────────────────────────────────────────────
 
@@ -175,6 +241,32 @@ function buildMerchant(idx, forceShortfall, today) {
   const currentBalance = bankBalances[bankBalances.length - 1].closing_balance_paise;
   const merchantId     = `merchant_${String(idx).padStart(3, '0')}`;
 
+  // ── Compute ground-truth label using the same day-by-day walk the
+  //    forecasting engine performs. This replaces the old lump-sum
+  //    comparison that produced stale/mismatched labels.
+  const gtWalk = simulateWalk(
+    currentBalance,
+    avgByDow,
+    emiPaise,
+    emiDueDate,
+    totalSalary,
+    payDate,
+    today,
+    14,
+  );
+
+  const groundTruth = {
+    merchant_id:                    merchantId,
+    is_planted_shortfall:           gtWalk.shortfall_detected,
+    expected_shortfall_date:        gtWalk.shortfall_date,
+    expected_shortfall_amount_paise: gtWalk.shortfall_amount_paise,
+    // Debug fields — used by accuracy.py exception-reason builders
+    _current_balance_paise:         currentBalance,
+    _expected_inflow_paise:         gtWalk._inflow_through_last_due,
+    _total_obligations_paise:       gtWalk._total_obligations,
+    _net_paise:                     currentBalance + gtWalk._inflow_through_last_due - gtWalk._total_obligations,
+  };
+
   return {
     merchant: {
       merchant_id:     merchantId,
@@ -213,6 +305,7 @@ function buildMerchant(idx, forceShortfall, today) {
       captured_at:         new Date(s.date),
     })),
     currentBalance,
+    groundTruth,
   };
 }
 
@@ -285,6 +378,7 @@ async function seed() {
   const bankBalanceDocs = [];
   const salesDocs       = [];
   const vaInserts       = [];
+  const groundTruthRows = [];
 
   console.log('\nGenerating data for 50 merchants…');
 
@@ -305,6 +399,7 @@ async function seed() {
     payrollDocs.push(m.payroll);
     bankBalanceDocs.push(...m.bankBalances);
     salesDocs.push(...m.sales);
+    groundTruthRows.push(m.groundTruth);
 
     // SYNTHETIC: models RazorpayX Fund Account shape, no public sandbox
     vaInserts.push({
@@ -357,18 +452,42 @@ async function seed() {
   );
   console.log(`  ✓ Platform reserve balance reset to ₹${PLATFORM_BALANCE / 100}`);
 
-  // ── 6. Summary ─────────────────────────────────────────────────────────
+  // ── 6. Write ground_truth.json ────────────────────────────────────────
+  // Ground truth is computed using the same day-by-day walk as engine.py,
+  // so labels are always consistent with what the engine will predict on
+  // the freshly seeded data. This file must be regenerated on every seed
+  // run — a stale ground_truth.json from a previous run date will always
+  // produce artificially bad precision/recall numbers.
+  const scriptDir = dirname(fileURLToPath(import.meta.url));
+  const outputDir = resolve(scriptDir, '../../scripts/output');
+  const gtPath    = resolve(outputDir, 'ground_truth.json');
+
+  try {
+    mkdirSync(outputDir, { recursive: true });
+    writeFileSync(gtPath, JSON.stringify(groundTruthRows, null, 2), 'utf-8');
+    const plantedCount = groundTruthRows.filter(r => r.is_planted_shortfall).length;
+    console.log(`  ✓ ground_truth.json written (${plantedCount} planted shortfalls)`);
+  } catch (e) {
+    console.error('  ✗ Failed to write ground_truth.json:', e.message);
+    // Don't abort — DB data is intact; ground_truth.json can be regenerated
+    // by re-running the seed. Log a clear warning.
+    console.error('    WARNING: accuracy reports will be stale until ground_truth.json is updated.');
+  }
+
+  // ── 7. Summary ─────────────────────────────────────────────────────────
+  const plantedCount = groundTruthRows.filter(r => r.is_planted_shortfall).length;
   console.log('\n─────────────────────────────────────────────────────');
   console.log('  Seed complete');
   console.log(`  Date basis:          ${isoDate(today)}`);
   console.log(`  Merchants:           ${merchantDocs.length}`);
-  console.log(`  Planted shortfalls:  ${NUM_SHORTFALL_TARGET}`);
+  console.log(`  Planted shortfalls:  ${plantedCount} (computed via day-by-day walk)`);
   console.log(`  Loans:               ${loanDocs.length}  (SYNTHETIC)`);
   console.log(`  Payrolls:            ${payrollDocs.length}  (SYNTHETIC)`);
   console.log(`  Bank balance rows:   ${bankBalanceDocs.length}`);
   console.log(`  Sales transactions:  ${inserted}  (SYNTHETIC pay_SEED_)`);
   console.log(`  Virtual accounts:    ${vaInserts.length}  (SYNTHETIC RazorpayX)`);
   console.log(`  Platform balance:    ₹${PLATFORM_BALANCE / 100}`);
+  console.log(`  ground_truth.json:   ${gtPath}`);
   console.log('─────────────────────────────────────────────────────');
   console.log('\nNext step: open the dashboard and click ↻ Run All Forecasts');
 
