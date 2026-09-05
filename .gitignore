@@ -30,7 +30,8 @@ claude.md
 CLAUDE.md
 
 # ── Generated seed output ─────────────────────────────────────────────────
-scripts/output/
+# ground_truth.json is committed — the AI service needs it at runtime
+scripts/output/seed_data.json
 
 # ── OS noise ──────────────────────────────────────────────────────────────
 .DS_Store
